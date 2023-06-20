@@ -39,8 +39,11 @@ function Map() {
     function makeStopNames(stops){
         let result = []
         for (let stp of stops){
-            result.push(stp.name)
+            if (!result.includes(stp.name)){
+                result.push(stp.name)
+            }
         }
+        console.log(result);
         return result
     }
 
@@ -63,8 +66,6 @@ function Map() {
         if (c <= 0){
             return;
         }
-        results.push(rt2); // WYJEB
-        forceUpdate() // WYJEB
         fetch(`https://maciekdt.loca.lt/nav/connection/${s}/${e}/${h}:${m}:00`)
         .then(res => res.json())
         .then(res => {
@@ -75,6 +76,8 @@ function Map() {
                 m = 0
                 h++;
             }
+            m = m<10 ? `0${m}` : String(m);
+            h = h<10 ? `0${h}` : String(h);
             findRoutes(s, e, h, m, c-1)
         })
         .catch(e => console.log(e));
@@ -90,7 +93,7 @@ function Map() {
                 while(results.length > 0) {
                     results.pop();
                 }
-                findRoutes(sStop.id, eStop.id, hour, minute, 10);
+                findRoutes(sStop.id, eStop.id, hour, minute, 5);
             }
         }
     };
@@ -163,9 +166,9 @@ function Map() {
                         <input className='startStop' autocomplete="off" onClick={() => setSDispaly(!sdisplay)} 
                         id="startStop" value={start} onChange={e => setStart(e.target.value)}></input>
                         <div className='autoCompleteStart'>
-                            {busStops && sdisplay && busStops.filter(({name}) => name.toLowerCase().indexOf(start.toLowerCase()) > -1).map((bstop) => (
-                                <div onClick={() => setStartAuto(bstop.name)} className='startACel' key={bstop.id}>
-                                    <p>{bstop.name}</p>
+                            {busStops && sdisplay && stopNames.filter((name) => name.toLowerCase().indexOf(start.toLowerCase()) > -1).map((name) => (
+                                <div onClick={() => setStartAuto(name)} className='startACel' key={stopNames.indexOf(name)}>
+                                    <p>{name}</p>
                                 </div>
                             ))}
                         </div>
@@ -177,9 +180,9 @@ function Map() {
                         <input className='startStop' autocomplete="off" onClick={() => setEDispaly(!edisplay)} 
                         id="endStop" value={end} onChange={e => setEnd(e.target.value)}></input>
                         <div className='autoCompleteStart'>
-                            {busStops && edisplay && busStops.filter(({name}) => name.toLowerCase().indexOf(end.toLowerCase()) > -1).map((bstop) => (
-                                <div onClick={() => setEndAuto(bstop.name)} className='startACel' key={bstop.id}>
-                                    <p>{bstop.name}</p>
+                        {busStops && edisplay && stopNames.filter((name) => name.toLowerCase().indexOf(end.toLowerCase()) > -1).map((name) => (
+                                <div onClick={() => setEndAuto(name)} className='startACel' key={stopNames.indexOf(name)}>
+                                    <p>{name}</p>
                                 </div>
                             ))}
                         </div>
