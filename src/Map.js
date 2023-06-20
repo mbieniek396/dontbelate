@@ -81,8 +81,8 @@ function Map() {
         .then(res => {
             results.push(res);
             forceUpdate()
-            m = Number(res[0].connection.arrivalTime.slice(3,5)) +1;
-            h = Number(res[0].connection.arrivalTime.slice(0,2));
+            m = Number(res[0].connection.departureTime.slice(3,5)) +1;
+            h = Number(res[0].connection.departureTime.slice(0,2));
             console.log(m, h);
             if (m > 59){
                 m = 0
