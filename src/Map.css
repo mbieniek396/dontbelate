@@ -36,7 +36,38 @@ aside{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 2rem;
+    padding-top: 1rem;
+}
+
+.rdisplay{
+    width: 40%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--primary-color);
+}
+
+.xLine{
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    padding-top: 0.3rem;
+}
+
+.x{
+    padding: 0.5rem 0.8rem;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    outline: none;
+}
+
+.x:hover{
+    background-color: var(--detail-color);
+    outline: 1px solid var(--accent-color);
+    cursor: pointer;
 }
 
 .inputs{
@@ -105,7 +136,7 @@ button:hover{
 }
 
 .stops{
-    margin-top: 2rem;
+    margin-top: 3rem;
     width: 90%;
     padding: 1rem 0;
     height: 100%;
@@ -172,4 +203,16 @@ button:hover{
     cursor: pointer;
     background-color: var(--accent-color);
     transition: all 0.4s;
+}
+
+.showRoute{
+    overflow: auto;
+}
+
+.stopShow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 0.3rem;
 }

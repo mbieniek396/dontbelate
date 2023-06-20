@@ -34,12 +34,10 @@ function Map() {
     const [stopNames, setStopNames] = useState(null);
     const [results, setResults] = useState([]);
 
-    const [result, setResult] = useState(null);
-
     const [sdisplay, setSDispaly] = useState(false);
     const [edisplay, setEDispaly] = useState(false);
 
-    const [rdisplay, setRDisplay] = useState(false);
+    const [rdisplay, setRDisplay] = useState(true);
 
     function makeStopNames(stops){
         let result = []
@@ -72,18 +70,16 @@ function Map() {
             return;
         }
         /// Wyb
-        // results.push(rt2);
-        // results.push(rt);
-        // forceUpdate();
+        results.push(rt2);
+        results.push(rt);
+        forceUpdate();
         /// End Wyb
         fetch(`https://maciekdt.loca.lt/nav/connection/${s}/${e}/${h}:${m}:00`)
         .then(res => res.json())
         .then(res => {
             results.push(res);
             forceUpdate()
-            m = Number(res[0].connection.arrivalTime.slice(3,5)) +1;
-            h = Number(res[0].connection.arrivalTime.slice(0,2));
-            console.log(m, h);
+            m++;
             if (m > 59){
                 m = 0
                 h++;
@@ -112,7 +108,6 @@ function Map() {
 
     const selectRoute = (rut) => {
         setRoute(rut); 
-        setResult(makeRoutes(rut));
         setCenter(latLon(rut[0].startBustStop.lat, rut[0].startBustStop.lon));
         setRDisplay(true);
     }
@@ -148,18 +143,6 @@ function Map() {
         );
     }
 
-    function countCount(route){
-        let lin = ""
-        let ct = 0
-        for (let r of route){
-            if (r.line.name !== lin){
-                ct++;
-                lin = r.line.name;
-            }
-        }
-        return ct;
-    }
-
     const mapOptions = {
         disableDefaultUI: true, // Turn off all default UI controls
     };
@@ -181,45 +164,13 @@ function Map() {
         setEDispaly(false);
     }
 
-    function makeRoutes(rut){
-        let lin = "";
-        let stops = [];
-        for (let r of rut){
-            if (r.line.name !== lin){
-                lin = r.line.name;
-                stops.push({name: r.startBustStop.name,
-                    time: r.connection.departureTime, change: true,
-                    line: r.line.name});
-            }
-            stops.push({name: r.endBustStop.name,
-            time: r.connection.arrivalTime, change: false})
-        }
-        return stops;
-    }
-
     return (
         <div className='map'>
             <aside>
                 {rdisplay && 
                 <section className='rdisplay'>
                     <article className='xLine'><div onClick={() => setRDisplay(false)} className='x'>X</div></article>
-                    <article className='showRoute'>
-                        {result.map((resu) => 
-                           {if (resu.change){
-                                return <div className='stopShow'>
-                                    <p>{resu.time}</p>
-                                    <h2>{resu.name}</h2>
-                                    <p>{resu.line}</p>
-                                </div>
-                            }else{
-                                return <div className='stopShow'>
-                                    <p>{resu.time}</p>
-                                    <h2>{resu.name}</h2>
-                                </div>
-                            }}
-                            
-                        )}
-                    </article>
+                    <article></article>
                 </section>}
                 <section className='inputs'>
                     <h1>Don't be late</h1>
@@ -283,7 +234,6 @@ function Map() {
                             <section className='line'>
                                 <h2>{resu[0].line.name}</h2>
                                 <img className='bus' src={busIcon}/>
-                                {countCount(resu) > 0 && <span>+{countCount(resu) -1}</span>}
                             </section>
                             <section className='fromTo'>
                                 <p className="times">{resu[0].connection.departureTime.slice(0,5)}</p>
