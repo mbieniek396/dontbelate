@@ -71,11 +71,11 @@ function Map() {
         if (c <= 0){
             return;
         }
-        /// Wyb
-        // results.push(rt2);
-        // results.push(rt);
-        // forceUpdate();
-        /// End Wyb
+        /// To display some basic routes without API
+        results.push(rt2);
+        results.push(rt);
+        forceUpdate();
+        /// End 
         fetch(`https://maciekdt.loca.lt/nav/connection/${s}/${e}/${h}:${m}:00`)
         .then(res => res.json())
         .then(res => {
